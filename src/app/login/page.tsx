@@ -6,12 +6,29 @@ import LoginImg from "../../assets/Sign up-rafiki.png";
 import Form from "@/components/forms/Form";
 import { SubmitHandler } from "react-hook-form";
 import FormInput from "@/components/forms/FormInput";
+import { useUserLoginMutation } from "@/redux/api/authApi";
+import {
+  getUserInfo,
+  isUserLoggedIn,
+  storeUserInfo,
+} from "@/services/auth.service";
+
+type IFormValues = {
+  id: string;
+  password: string;
+};
 
 const LoginPage = () => {
-  const handleSubmit: SubmitHandler<any> = (data) => {
+  const [userLogin] = useUserLoginMutation();
+  const handleSubmit: SubmitHandler<IFormValues> = async (data: any) => {
     try {
-      console.log(data);
-    } catch (error) {}
+      const res = await userLogin({ ...data }).unwrap();
+      if (res.success) {
+        storeUserInfo({ accessToken: res?.data?.accessToken });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <Row>
