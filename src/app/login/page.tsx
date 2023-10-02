@@ -12,6 +12,7 @@ import {
   isUserLoggedIn,
   storeUserInfo,
 } from "@/services/auth.service";
+import { useRouter } from "next/navigation";
 
 type IFormValues = {
   id: string;
@@ -19,12 +20,16 @@ type IFormValues = {
 };
 
 const LoginPage = () => {
+  const router = useRouter();
   const [userLogin] = useUserLoginMutation();
   const handleSubmit: SubmitHandler<IFormValues> = async (data: any) => {
     try {
       const res = await userLogin({ ...data }).unwrap();
       if (res.success) {
         storeUserInfo({ accessToken: res?.data?.accessToken });
+        if (res?.data?.accessToken) {
+          router.push("/profile");
+        }
       }
     } catch (error) {
       console.error(error);

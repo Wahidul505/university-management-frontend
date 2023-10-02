@@ -2,6 +2,7 @@
 import React from "react";
 import { Layout } from "antd";
 import UmBreadCrumb from "./UmBreadCrumb";
+import Header from "./Header";
 
 const { Content } = Layout;
 
@@ -18,6 +19,7 @@ const Contents = ({ children }: { children: React.ReactNode }) => {
   ];
   return (
     <Layout>
+      <Header />
       <UmBreadCrumb items={breadCrumbItems} />
       <Content
         style={{
