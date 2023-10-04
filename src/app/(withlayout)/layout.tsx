@@ -1,6 +1,7 @@
 "use client";
 import Contents from "@/components/ui/Contents";
 import Sidebar from "@/components/ui/Sidebar";
+import { authKey } from "@/constants/authToken";
 import { isUserLoggedIn } from "@/services/auth.service";
 import { Layout } from "antd";
 import { useRouter } from "next/navigation";
@@ -8,7 +9,7 @@ import React, { useEffect, useState } from "react";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const isLoggedIn = isUserLoggedIn();
+  const isLoggedIn = isUserLoggedIn(authKey);
   const router = useRouter();
 
   useEffect(() => {

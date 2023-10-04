@@ -2,15 +2,18 @@ import React from "react";
 import { Avatar, Button, Dropdown, Layout, Row, Space } from "antd";
 import type { MenuProps } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { removeUserInfo } from "@/services/auth.service";
+import { getUserInfo, removeUserInfo } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
+import { authKey } from "@/constants/authToken";
 
 const { Header: AntHeader } = Layout;
 
 const Header = () => {
   const router = useRouter();
+  const { role } = getUserInfo() as any;
+
   const logOut = () => {
-    removeUserInfo();
+    removeUserInfo(authKey);
     router.push("/login");
   };
 
@@ -34,6 +37,11 @@ const Header = () => {
           height: "100%",
         }}
       >
+        {role && (
+          <div style={{ color: "gray", fontSize: "16px", marginRight: "10px" }}>
+            {role}
+          </div>
+        )}
         <Dropdown menu={{ items }} placement="bottomRight" arrow>
           <Space
             wrap
