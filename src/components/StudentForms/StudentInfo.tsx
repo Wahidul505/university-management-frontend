@@ -51,7 +51,7 @@ const StudentInfo = () => {
         </Col>
         <Col className="gutter-row" span={6} style={columnStyle}>
           <FormInput
-            name="student.password"
+            name="password"
             type="password"
             label="Password"
             size="large"

@@ -1,5 +1,5 @@
 "use client";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Row, message } from "antd";
 import Image from "next/image";
 import React from "react";
 import LoginImg from "../../assets/Sign up-rafiki.png";
@@ -25,6 +25,7 @@ const Login = () => {
       storeUserInfo({ accessToken: res?.accessToken });
       if (res?.accessToken) {
         router.push("/profile");
+        message.success("Logged In");
       }
     } catch (error) {
       console.error(error);

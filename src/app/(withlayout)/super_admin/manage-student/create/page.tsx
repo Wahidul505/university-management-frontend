@@ -7,7 +7,7 @@ import StudentInfo from "@/components/StudentForms/StudentInfo";
 import React from "react";
 
 const CreateStudentPage = () => {
-  const handleSubmit = (data: any) => {
+  const handleSubmit = async (data: any) => {
     try {
       console.log(data);
     } catch (error) {
