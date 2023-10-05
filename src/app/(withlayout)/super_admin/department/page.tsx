@@ -1,8 +1,11 @@
 "use client";
 import ActionHeader from "@/components/ui/ActionHeader";
 import UMTable from "@/components/ui/UMTable";
-import { useDepartmentsQuery } from "@/redux/api/departmentApi";
-import { Button, Input } from "antd";
+import {
+  useDeleteDepartmentMutation,
+  useDepartmentsQuery,
+} from "@/redux/api/departmentApi";
+import { Button, Input, message } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -15,13 +18,13 @@ import dayjs, { Dayjs } from "dayjs";
 import { useRouter } from "next/navigation";
 
 const ManageDepartmentPage = () => {
-  const router = useRouter();
   const query: Record<string, any> = {};
   const [size, setSize] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
   const [sortBy, setSortBy] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [deleteDepartment] = useDeleteDepartmentMutation();
 
   query["limit"] = size;
   query["page"] = page;
@@ -58,7 +61,10 @@ const ManageDepartmentPage = () => {
       render: function (data: any) {
         return (
           <>
-            <Button onClick={() => console.log(data)} size="middle">
+            <Button
+              onClick={() => handleDeleteDepartment(data?.id)}
+              size="middle"
+            >
               <DeleteOutlined />
             </Button>
             <Link href={`/super_admin/department/edit/${data.id}`}>
@@ -87,6 +93,16 @@ const ManageDepartmentPage = () => {
     setSearchTerm("");
     setSortOrder("");
     setSortBy("");
+  };
+
+  const handleDeleteDepartment = async (id: string) => {
+    try {
+      message.loading("Deleting Department...");
+      await deleteDepartment(id);
+      message.success("Department Deleted");
+    } catch (error: any) {
+      message.error(error?.message);
+    }
   };
 
   return (
