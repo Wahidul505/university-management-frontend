@@ -6,13 +6,16 @@ import { Button, Input } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
-  EyeOutlined,
   ReloadOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
 import React, { useState } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
+import dayjs, { Dayjs } from "dayjs";
+import { useRouter } from "next/navigation";
 
 const ManageDepartmentPage = () => {
+  const router = useRouter();
   const query: Record<string, any> = {};
   const [size, setSize] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
@@ -24,7 +27,10 @@ const ManageDepartmentPage = () => {
   query["page"] = page;
   query["sortBy"] = sortBy;
   query["sortOrder"] = sortOrder;
-  query["searchTerm"] = searchTerm;
+
+  const debounce = useDebounce(searchTerm, 600);
+
+  if (!!debounce) query["searchTerm"] = searchTerm;
 
   const { data, isLoading } = useDepartmentsQuery({ ...query });
 
@@ -41,6 +47,9 @@ const ManageDepartmentPage = () => {
       title: "Created At",
       dataIndex: "createdAt",
       key: "createdAt",
+      render: function (date: any) {
+        return date && dayjs(date).format("MMM D, YYYY hh:mm A");
+      },
       sorter: true,
       // sorter: (a: any, b: any) => a.age - b.age,
     },
@@ -49,19 +58,14 @@ const ManageDepartmentPage = () => {
       render: function (data: any) {
         return (
           <>
-            <Button onClick={() => console.log(data)} size="small">
+            <Button onClick={() => console.log(data)} size="middle">
               <DeleteOutlined />
             </Button>
-            <Button
-              onClick={() => console.log(data)}
-              size="small"
-              style={{ margin: "0px 5px" }}
-            >
-              <EditOutlined />
-            </Button>
-            <Button onClick={() => console.log(data)} size="small">
-              <EyeOutlined />
-            </Button>
+            <Link href={`/super_admin/department/edit/${data.id}`}>
+              <Button size="middle" style={{ margin: "0px 5px" }}>
+                <EditOutlined />
+              </Button>
+            </Link>
           </>
         );
       },
