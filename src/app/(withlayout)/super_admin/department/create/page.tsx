@@ -1,27 +1,21 @@
 "use client";
 import Form from "@/components/forms/Form";
-import FormDatePicker from "@/components/forms/FormDatePicker";
 import FormInput from "@/components/forms/FormInput";
-import SelectFormInput from "@/components/forms/SelectFormInput";
-import TextArea from "@/components/forms/TextArea";
-import ImageUploader from "@/components/ui/ImageUploader";
-import {
-  bloodGroupInputs,
-  genderInputs,
-  managementDepartmentInputs,
-} from "@/constants/global";
-import { adminSchema } from "@/schema/admin";
+import { useAddDepartmentMutation } from "@/redux/api/departmentApi";
 import { departmentSchema } from "@/schema/department";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Col, Row } from "antd";
+import { Button, message } from "antd";
 import React from "react";
 
 const CreateDepartmentPage = () => {
-  const handleSubmit = (data: any) => {
+  const [addDepartment] = useAddDepartmentMutation();
+  const handleSubmit = async (data: any) => {
     try {
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+      message.loading("Creating Department...");
+      await addDepartment(data);
+      message.success("Department Created");
+    } catch (error: any) {
+      message.error(error?.message);
     }
   };
   return (
