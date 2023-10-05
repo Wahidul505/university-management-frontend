@@ -1,72 +1,123 @@
 "use client";
 import ActionHeader from "@/components/ui/ActionHeader";
 import UMTable from "@/components/ui/UMTable";
-import { Button } from "antd";
+import { useDepartmentsQuery } from "@/redux/api/departmentApi";
+import { Button, Input } from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  ReloadOutlined,
+} from "@ant-design/icons";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 const ManageDepartmentPage = () => {
+  const query: Record<string, any> = {};
+  const [size, setSize] = useState<number>(10);
+  const [page, setPage] = useState<number>(1);
+  const [sortBy, setSortBy] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  query["limit"] = size;
+  query["page"] = page;
+  query["sortBy"] = sortBy;
+  query["sortOrder"] = sortOrder;
+  query["searchTerm"] = searchTerm;
+
+  const { data, isLoading } = useDepartmentsQuery({ ...query });
+
+  const departments = data?.departments;
+  const meta = data?.meta;
+
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
-      sorter: (a: any, b: any) => a.age - b.age,
+      title: "Created At",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      sorter: true,
+      // sorter: (a: any, b: any) => a.age - b.age,
     },
     {
       title: "Action",
       render: function (data: any) {
         return (
-          <Button onClick={() => console.log(data)} danger size="small">
-            Delete
-          </Button>
+          <>
+            <Button onClick={() => console.log(data)} size="small">
+              <DeleteOutlined />
+            </Button>
+            <Button
+              onClick={() => console.log(data)}
+              size="small"
+              style={{ margin: "0px 5px" }}
+            >
+              <EditOutlined />
+            </Button>
+            <Button onClick={() => console.log(data)} size="small">
+              <EyeOutlined />
+            </Button>
+          </>
         );
       },
-    },
-  ];
-  const tableData = [
-    {
-      key: "1",
-      name: "Mike",
-      age: 32,
-    },
-    {
-      key: "2",
-      name: "John",
-      age: 42,
     },
   ];
 
   const handleTableChange = (pagination: any, filter: any, sorter: any) => {
     const { order, field } = sorter;
-    console.log(order, field);
+    field && setSortBy(field);
+    order && order === "ascend" ? setSortOrder("asc") : setSortOrder("desc");
   };
 
   const handlePaginationChange = (page: number, pageSize: number) => {
-    console.log("page:", page);
-    console.log("page size:", pageSize);
+    page && setPage(page);
+    pageSize && setSize(pageSize);
+  };
+
+  const handleReloadQueryParams = () => {
+    setSearchTerm("");
+    setSortOrder("");
+    setSortBy("");
   };
 
   return (
     <div>
       {" "}
       <ActionHeader title="Department List">
-        <Link href={"/super_admin/department/create"}>
-          <Button>Create Department</Button>
-        </Link>
+        <Input
+          size="large"
+          type="text"
+          style={{
+            width: "30%",
+          }}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <div>
+          <Link href={"/super_admin/department/create"}>
+            <Button>Create Department</Button>
+          </Link>
+          {(!!sortBy || !!sortOrder || !!searchTerm) && (
+            <Button
+              style={{ marginLeft: "10px" }}
+              onClick={handleReloadQueryParams}
+            >
+              <ReloadOutlined />
+            </Button>
+          )}
+        </div>
       </ActionHeader>
       <div>
         <UMTable
-          loading={false}
+          loading={isLoading}
           columns={columns}
-          tableData={tableData}
-          pageSize={5}
-          totalData={10}
+          tableData={departments}
+          pageSize={size}
+          totalData={meta?.total}
           showSizeChanger={true}
           handleTableChange={handleTableChange}
           handlePaginationChange={handlePaginationChange}
