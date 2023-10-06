@@ -5,26 +5,48 @@ import FormInput from "@/components/forms/FormInput";
 import SelectFormInput from "@/components/forms/SelectFormInput";
 import TextArea from "@/components/forms/TextArea";
 import ImageUploader from "@/components/ui/ImageUploader";
-import {
-  bloodGroupInputs,
-  genderInputs,
-  managementDepartmentInputs,
-} from "@/constants/global";
+import { bloodGroupInputs, genderInputs } from "@/constants/global";
+import { useCreateAdminWithFormDataMutation } from "@/redux/api/adminApi";
+import { useDepartmentsQuery } from "@/redux/api/departmentApi";
 import { adminSchema } from "@/schema/admin";
+import { IDepartment } from "@/types";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Row, message } from "antd";
 import React from "react";
 
 const columnStyle = { marginTop: "10px" };
 
 const CreateAdminPage = () => {
-  const handleSubmit = (data: any) => {
+  const { data, isLoading } = useDepartmentsQuery({ limit: 100 });
+  const [createAdminWithFormData] = useCreateAdminWithFormDataMutation();
+  // @ts-ignore
+  const departments: IDepartment[] = data?.departments;
+
+  const managementDepartmentInputs =
+    departments &&
+    departments?.map((department) => ({
+      label: department?.title,
+      value: department?.id,
+    }));
+
+  const handleSubmit = async (values: any) => {
+    const obj = { ...values };
+    const file = obj["file"];
+    delete obj["file"];
+    const data = JSON.stringify(obj);
+    const formData = new FormData();
+    formData.append("file", file as Blob);
+    formData.append("data", data);
     try {
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+      message.loading("Creating Admin...");
+      await createAdminWithFormData(formData);
+      message.success("Admin Created");
+    } catch (error: any) {
+      console.log(error);
+      message.error(error?.message);
     }
   };
+
   return (
     <div>
       <h1 style={{ marginBottom: "10px", fontSize: "24px", fontWeight: "600" }}>
@@ -97,7 +119,7 @@ const CreateAdminPage = () => {
                 />
               </Col>
               <Col className="gutter-row" span={8} style={columnStyle}>
-                <ImageUploader />
+                <ImageUploader name="file" />
               </Col>
             </Row>
           </div>

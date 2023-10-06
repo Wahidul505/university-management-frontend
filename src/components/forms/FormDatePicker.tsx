@@ -35,7 +35,7 @@ const FormDatePicker = ({
             style={{
               width: "100%",
             }}
-            value={dayjs(field.value) || ""}
+            defaultValue={dayjs(field.value) || ""}
             size={size}
             onChange={handleDateChange}
           />
