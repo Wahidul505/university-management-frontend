@@ -111,3 +111,38 @@ export const academicSemesterInputs = [
     value: "autumn_2024",
   },
 ];
+
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+export const monthInputs = months.map((month) => ({
+  label: month,
+  value: month,
+}));
+
+export const academicSemesterTitleInputs = [
+  {
+    label: "Autumn",
+    value: "Autumn",
+  },
+  {
+    label: "Spring",
+    value: "Spring",
+  },
+  {
+    label: "Fall",
+    value: "Fall",
+  },
+];

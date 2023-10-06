@@ -68,3 +68,15 @@ export type IAcademicDepartment = {
   updatedAt: string;
   __v: number;
 };
+
+export type IAcademicSemester = {
+  id: string;
+  year: number;
+  title: string;
+  code: string;
+  startMonth: string;
+  endMonth: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};

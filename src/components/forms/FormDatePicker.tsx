@@ -3,7 +3,7 @@ import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import dayjs, { Dayjs } from "dayjs";
 
-interface ITextAreaProps {
+interface IDatePickerProps {
   onChange?: (value1: Dayjs | null, value2: string) => void;
   name: string;
   size?: "small" | "large";
@@ -17,7 +17,7 @@ const FormDatePicker = ({
   value,
   label,
   onChange,
-}: ITextAreaProps) => {
+}: IDatePickerProps) => {
   const { control, setValue } = useFormContext();
   const handleDateChange: DatePickerProps["onChange"] = (date, dateString) => {
     onChange ? onChange(date, dateString) : null;
@@ -35,7 +35,7 @@ const FormDatePicker = ({
             style={{
               width: "100%",
             }}
-            defaultValue={dayjs(field.value) || ""}
+            defaultValue={dayjs(field.value) || Date.now()}
             size={size}
             onChange={handleDateChange}
           />
