@@ -9,7 +9,7 @@ import { bloodGroupInputs, genderInputs } from "@/constants/global";
 import { useCreateAdminWithFormDataMutation } from "@/redux/api/adminApi";
 import { useDepartmentsQuery } from "@/redux/api/departmentApi";
 import { adminSchema } from "@/schema/admin";
-import { IDepartment } from "@/types";
+import { IManagementDepartment } from "@/types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Col, Row, message } from "antd";
 import React from "react";
@@ -20,7 +20,7 @@ const CreateAdminPage = () => {
   const { data, isLoading } = useDepartmentsQuery({ limit: 100 });
   const [createAdminWithFormData] = useCreateAdminWithFormDataMutation();
   // @ts-ignore
-  const departments: IDepartment[] = data?.departments;
+  const departments: IManagementDepartment[] = data?.departments;
 
   const managementDepartmentInputs =
     departments &&

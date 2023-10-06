@@ -1,4 +1,4 @@
-import { IDepartment, IMeta } from "@/types";
+import { IManagementDepartment, IMeta } from "@/types";
 import { tagTypes } from "../tagTypes";
 import { baseApi } from "./baseApi";
 
@@ -13,7 +13,7 @@ export const departmentApi = baseApi.injectEndpoints({
         method: "GET",
         params: query,
       }),
-      transformResponse: (response: IDepartment[], meta: IMeta) => {
+      transformResponse: (response: IManagementDepartment[], meta: IMeta) => {
         return {
           departments: response,
           meta,
