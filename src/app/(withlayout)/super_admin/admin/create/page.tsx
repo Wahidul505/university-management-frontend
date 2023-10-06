@@ -42,7 +42,6 @@ const CreateAdminPage = () => {
       await createAdminWithFormData(formData);
       message.success("Admin Created");
     } catch (error: any) {
-      console.log(error);
       message.error(error?.message);
     }
   };
