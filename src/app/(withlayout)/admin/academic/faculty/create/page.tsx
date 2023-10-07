@@ -10,6 +10,7 @@ import React from "react";
 
 const CreateAcademicFacultyPage = () => {
   const [addAcademicFaculty] = useAddAcademicFacultyMutation();
+
   const handleSubmit = async (data: any) => {
     try {
       message.loading("Creating Academic Faculty...");
@@ -19,6 +20,7 @@ const CreateAcademicFacultyPage = () => {
       message.error(error?.message);
     }
   };
+
   return (
     <div>
       <h1 style={{ marginBottom: "10px", fontSize: "24px", fontWeight: "600" }}>

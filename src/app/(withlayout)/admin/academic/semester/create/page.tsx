@@ -12,13 +12,12 @@ const CreateAcademicSemesterPage = () => {
   const [addAcademicSemester] = useAddAcademicSemesterMutation();
   const handleSubmit = async (data: any) => {
     if (data?.title === "Autumn") data.code = "01";
-    else if (data?.title === "Spring") data.code = "02";
+    else if (data?.title === "Summer") data.code = "02";
     else data.code = "03";
     data["year"] = Number(data?.year);
     try {
       message.loading("Creating Academic Semester...");
       await addAcademicSemester(data);
-      console.log(data);
       message.success("Academic Semester Created");
     } catch (error: any) {
       message.error(error?.message);

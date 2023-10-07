@@ -138,8 +138,8 @@ export const academicSemesterTitleInputs = [
     value: "Autumn",
   },
   {
-    label: "Spring",
-    value: "Spring",
+    label: "Summer",
+    value: "Summer",
   },
   {
     label: "Fall",

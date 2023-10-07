@@ -38,6 +38,7 @@ export type IAdmin = {
   emergencyContactNo: string;
   gender: string;
   id: string;
+  profileImage: string;
   managementDepartment: {
     _id: string;
     title: string;
@@ -50,6 +51,28 @@ export type IAdmin = {
   presentAddress: string;
   updatedAt: string;
   __v: number;
+};
+
+export type IFaculty = {
+  faculty: {
+    name: {
+      firstName: string;
+      lastName: string;
+      middleName: string;
+    };
+    dateOfBirth: string;
+    gender: string;
+    bloodGroup: string;
+    email: string;
+    contactNo: string;
+    emergencyContactNo: string;
+    presentAddress: string;
+    permanentAddress: string;
+    academicFaculty: string;
+    academicDepartment: string;
+    designation: string;
+    profileImage: string;
+  };
 };
 
 export type IAcademicFaculty = {

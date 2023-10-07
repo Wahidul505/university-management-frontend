@@ -1,4 +1,6 @@
 "use client";
+import ACDepartmentSelectOptions from "@/components/forms/ACDepartmentSelectOptions";
+import ACFacultySelectOptions from "@/components/forms/ACFacultySelectOptions";
 import Form from "@/components/forms/Form";
 import FormDatePicker from "@/components/forms/FormDatePicker";
 import FormInput from "@/components/forms/FormInput";
@@ -11,21 +13,34 @@ import {
   bloodGroupInputs,
   genderInputs,
 } from "@/constants/global";
+import { useCreateFacultyWithFormDataMutation } from "@/redux/api/facultyApi";
 import { facultySchema } from "@/schema/faculty";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Row, message } from "antd";
 import React from "react";
 
 const columnStyle = { marginTop: "10px" };
 
 const CreateFacultyPage = () => {
-  const handleSubmit = (data: any) => {
+  const [createFacultyWithFormData] = useCreateFacultyWithFormDataMutation();
+
+  const handleSubmit = async (values: any) => {
+    const obj = { ...values };
+    const file = obj["file"];
+    delete obj["file"];
+    const data = JSON.stringify(obj);
+    const formData = new FormData();
+    formData.append("file", file as Blob);
+    formData.append("data", data);
     try {
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+      message.loading("Creating Faculty...");
+      const res = await createFacultyWithFormData(formData);
+      res && message.success("Faculty Created");
+    } catch (error: any) {
+      message.error(error?.message);
     }
   };
+
   return (
     <div>
       <h1 style={{ marginBottom: "10px", fontSize: "24px", fontWeight: "600" }}>
@@ -92,25 +107,19 @@ const CreateFacultyPage = () => {
                 />
               </Col>
               <Col className="gutter-row" span={8} style={columnStyle}>
-                <SelectFormInput
+                <ACFacultySelectOptions
                   name="faculty.academicFaculty"
-                  options={academicFacultyInputs}
-                  size="large"
-                  placeholder="Select"
                   label="Academic Faculty"
                 />
               </Col>
               <Col className="gutter-row" span={8} style={columnStyle}>
-                <SelectFormInput
+                <ACDepartmentSelectOptions
                   name="faculty.academicDepartment"
-                  options={academicDepartmentInputs}
-                  size="large"
-                  placeholder="Select"
                   label="Academic Department"
                 />
               </Col>
               <Col className="gutter-row" span={8} style={columnStyle}>
-                <ImageUploader />
+                <ImageUploader name={""} />
               </Col>
             </Row>
           </div>

@@ -94,7 +94,7 @@ const StudentInfo = () => {
           />
         </Col>
         <Col className="gutter-row" span={24} style={columnStyle}>
-          <ImageUploader />
+          <ImageUploader name="file" />
         </Col>
       </Row>
     </div>
