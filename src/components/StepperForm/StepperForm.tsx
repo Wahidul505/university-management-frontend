@@ -14,13 +14,24 @@ type IStepsProps = {
   steps: ISteps[];
   handleSubmit: (data: any) => void;
   navigationLink: string;
+  persistKey: string;
 };
 
-const StepperForm = ({ steps, handleSubmit, navigationLink }: IStepsProps) => {
+const StepperForm = ({
+  steps,
+  handleSubmit,
+  navigationLink,
+  persistKey,
+}: IStepsProps) => {
   const [current, setCurrent] = useState<number>(
     !!getFromLocalStorage("step")
       ? Number(JSON.parse(getFromLocalStorage("step") as string).step)
       : 0
+  );
+  const [formValues, setFormValues] = useState(
+    !!getFromLocalStorage(persistKey)
+      ? JSON.parse(getFromLocalStorage(persistKey) as string)
+      : {}
   );
   const router = useRouter();
 
@@ -47,7 +58,11 @@ const StepperForm = ({ steps, handleSubmit, navigationLink }: IStepsProps) => {
   return (
     <>
       <Steps current={current} items={items} />
-      <Form submitHandler={handleFormSubmit}>
+      <Form
+        submitHandler={handleFormSubmit}
+        persistKey={persistKey}
+        defaultValues={formValues}
+      >
         <div style={{ marginTop: "15px" }}>{steps[current].content}</div>
         <div style={{ marginTop: 24 }}>
           {current > 0 && (

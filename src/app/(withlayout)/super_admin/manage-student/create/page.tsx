@@ -43,6 +43,7 @@ const CreateStudentPage = () => {
           steps={steps}
           handleSubmit={handleSubmit}
           navigationLink="/"
+          persistKey="student-create-form"
         />
       </div>
     </div>
